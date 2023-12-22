@@ -22,9 +22,8 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-
 android {
-    namespace "com.example.calibration_3d"
+    namespace "com.ramosoft.calibration_3d"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -42,38 +41,32 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.calibration_3d"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+        applicationId "com.ramosoft.calibration_3d"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
-    buildTypes {
+    signingConfigs {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            def keyPropertiesFile = rootProject.file("key.properties")
+            def keyProperties = new Properties()
+            keyProperties.load(new FileInputStream(keyPropertiesFile))
+
+            storeFile file(keyProperties['storeFile'])
+            storePassword keyProperties['storePassword']
+            keyAlias keyProperties['keyAlias']
+            keyPassword keyProperties['keyPassword']
         }
     }
 
-signingConfigs {
-        release {
-            storeFile file("key.jks")
-            storePassword project.properties['storePassword']
-            keyAlias project.properties['keyAlias']
-            keyPassword project.properties['keyPassword']
-        }
-    }
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            // Diğer ayarlar
         }
     }
-  
 }
 
 flutter {

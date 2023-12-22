@@ -1,4 +1,7 @@
 // ignore: depend_on_referenced_packages
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import "package:google_mobile_ads/google_mobile_ads.dart"
     show AdWidget, MobileAds;
 import 'package:flutter/material.dart';
@@ -18,7 +21,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Builder(builder: (context) => const Home()),
+      home: Builder(
+        builder: (context) => const Home(),
+      ),
     );
   }
 }
@@ -41,7 +46,10 @@ class _HomeState extends State<Home> {
 
   // Seçenekler listesi
   List<String> options = ['Calibration: X', 'Calibration: Y', 'Calibration: Z'];
-
+  List<TextInputFormatter> text_format = [
+    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+    // Yukarıdaki Regex, sadece ondalık sayıları (double) kabul eder.
+  ];
   // Seçilen değeri tutacak değişken
   String selectedOption = "Calibration: X";
 
@@ -57,6 +65,50 @@ class _HomeState extends State<Home> {
     ga.loadAd();
 
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Motor Step Calibration',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.home,
+              ),
+              title: const Text('Home'),
+              onTap: () {
+                // Ana sayfaya yönlendirme işlemi burada gerçekleştirilebilir.
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.exit_to_app,
+              ),
+              title: const Text('Exit'),
+              onTap: () {
+                // Ayarlar sayfasına yönlendirme işlemi burada gerçekleştirilebilir.
+                exit(1);
+              },
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        title: const Text("Step Motor Calibration"),
+        centerTitle: true,
+        backgroundColor: Colors.grey.shade100,
+      ),
       body: Center(
         child: ListView(
           children: [
@@ -86,9 +138,9 @@ class _HomeState extends State<Home> {
                 child: Center(
                   child: Column(
                     children: [
-                      Text("Output X: $formulaX"),
-                      Text("Output Y: $formulaY"),
-                      Text("Output Z: $formulaZ"),
+                      Text("X: $formulaX"),
+                      Text("Y: $formulaY"),
+                      Text("Z: $formulaZ"),
                     ],
                   ),
                 ),
@@ -122,6 +174,7 @@ class _HomeState extends State<Home> {
               ),
               child: TextField(
                 controller: iInput,
+                inputFormatters: text_format,
                 decoration: const InputDecoration(
                   hintText: "0.0",
                   prefixText: "The optimal parameter: ",
@@ -139,6 +192,7 @@ class _HomeState extends State<Home> {
               ),
               child: TextField(
                 controller: mStep,
+                inputFormatters: text_format,
                 decoration: const InputDecoration(
                   hintText: "0.0",
                   prefixText: "Average value of a s motor: ",
@@ -156,6 +210,7 @@ class _HomeState extends State<Home> {
               ),
               child: TextField(
                 controller: outputM,
+                inputFormatters: text_format,
                 decoration: const InputDecoration(
                   hintText: "0.0",
                   prefixText: "Output measurement: ",
