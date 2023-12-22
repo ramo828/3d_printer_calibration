@@ -12,7 +12,6 @@
 *.iws
 *.iws.iml
 *.ipr
-*.iws
 
 # Visual Studio Code #
 .vscode/
@@ -56,27 +55,13 @@ ios/Flutter/flutter_export_environment.sh
 *.kotlin_built
 
 # Miscellaneous
-*.class
 *.log
-*.pyc
 *.swp
-.DS_Store
 .atom/
 .buildlog/
 .history
 .svn/
 migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -85,7 +70,7 @@ migrate_working_dir/
 .flutter-plugins
 .flutter-plugins-dependencies
 .pub-cache/
-.pub/
+/pub/
 /build/
 
 # Symbolication related

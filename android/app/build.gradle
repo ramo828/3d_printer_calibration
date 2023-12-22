@@ -70,7 +70,6 @@ signingConfigs {
     }
     buildTypes {
         release {
-            ...
             signingConfig signingConfigs.release
         }
     }
