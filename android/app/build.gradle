@@ -22,6 +22,7 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+
 android {
     namespace "com.example.calibration_3d"
     compileSdk flutter.compileSdkVersion
@@ -58,6 +59,22 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+signingConfigs {
+        release {
+            storeFile file("key.jks")
+            storePassword project.properties['storePassword']
+            keyAlias project.properties['keyAlias']
+            keyPassword project.properties['keyPassword']
+        }
+    }
+    buildTypes {
+        release {
+            ...
+            signingConfig signingConfigs.release
+        }
+    }
+  
 }
 
 flutter {

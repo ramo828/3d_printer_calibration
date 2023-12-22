@@ -6,15 +6,10 @@ class Google_ads {
   BannerAd? bannerAd;
   bool _isLoaded = false;
 
-  // TODO: replace this test ad unit with your own ad unit.
-  final adUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
-
   /// Loads a banner ad.
   void loadAd() {
     bannerAd = BannerAd(
-      adUnitId: adUnitId,
+      adUnitId: "ca-app-pub-3962458560603198/8372025013",
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(

@@ -50,7 +50,7 @@
 
     <!-- Reklam hizmeti için gerekli izinler --><meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"/>
+            android:value="ca-app-pub-3962458560603198/8372025013"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 </manifest>
