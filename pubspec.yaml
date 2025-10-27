@@ -39,6 +39,10 @@ dependencies:
   cupertino_icons: ^1.0.6
 
   google_mobile_ads: any
+  fl_chart:
+  google_fonts:
+  path_provider:
+  marquee:
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,29 +1,64 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class Google_ads {
-  BannerAd? bannerAd;
+class GoogleAds {
+  BannerAd? _bannerAd;
   bool _isLoaded = false;
 
-  /// Loads a banner ad.
+  static const String _testAdUnitId = 'ca-app-pub-3940256099942544/6300978111';
+
   void loadAd() {
-    bannerAd = BannerAd(
-      adUnitId: "ca-app-pub-3962458560603198/8372025013",
+    _bannerAd?.dispose();
+    _bannerAd = null;
+    _isLoaded = false;
+
+    _bannerAd = BannerAd(
+      adUnitId: _testAdUnitId,
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
-        // Called when an ad is successfully received.
         onAdLoaded: (ad) {
           debugPrint('$ad loaded.');
           _isLoaded = true;
         },
-        // Called when an ad request failed.
         onAdFailedToLoad: (ad, err) {
           debugPrint('BannerAd failed to load: $err');
-          // Dispose the ad here to free resources.
           ad.dispose();
+          _bannerAd = null;
+          _isLoaded = false;
+        },
+        onAdOpened: (ad) {
+          debugPrint('$ad opened.');
+        },
+        onAdClosed: (ad) {
+          debugPrint('$ad closed.');
+        },
+        onAdImpression: (ad) {
+          debugPrint('$ad impression.');
         },
       ),
-    )..load();
+    );
+
+    _bannerAd!.load();
+  }
+
+  bool get isAdLoaded => _isLoaded;
+
+  Widget? getAdWidget() {
+    if (_bannerAd != null && _isLoaded) {
+      return SizedBox(
+        width: _bannerAd!.size.width.toDouble(),
+        height: _bannerAd!.size.height.toDouble(),
+        child: AdWidget(ad: _bannerAd!),
+      );
+    }
+    return null;
+  }
+
+  void dispose() {
+    _bannerAd?.dispose();
+    _bannerAd = null;
+    _isLoaded = false;
   }
 }
