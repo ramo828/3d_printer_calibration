@@ -4,7 +4,11 @@
 .flutter-plugins-dependencies
 .packages
 .pub/
+.pub-cache/
+/pub/
 /build/
+**/doc/api/
+**/ios/Flutter/.last_build_id
 
 # IntelliJ/Android Studio #
 .idea/
@@ -31,20 +35,35 @@ ios/Flutter/app.flx
 ios/Flutter/app.zip
 ios/Flutter/flutter_assets/
 ios/Flutter/flutter_export_environment.sh
+ios/Flutter/ephemeral/
 
 # Android #
 /android/.gradle/
+/android/.kotlin/
 /android/captures/
 /android/build/
-/android/key.properties  # Bu dosyayı ignore etmek önerilir
-/android/app/key.jks    # key.jks dosyasını da ignore etmek önerilir
+/android/local.properties
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# İmzalama anahtarları ve sertifikalar - ASLA commit etme #
+# (Not: .gitignore'da satır sonu yorumu çalışmaz; yorumlar kendi satırında olmalı.)
+key.properties
+**/key.properties
+*.jks
+*.keystore
+*.pem
+*.p12
 
 # Build/compiled files #
+# Not: "*.pro" kuralı kaldırıldı; android/app/proguard-rules.pro takip edilmeli.
 *.apk
+*.aab
 *.ap_
 *.class
 *.dex
-*.pro
 *.o
 *.obj
 *.pyc
@@ -63,23 +82,8 @@ ios/Flutter/flutter_export_environment.sh
 .svn/
 migrate_working_dir/
 
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-/pub/
-/build/
-
 # Symbolication related
 app.*.symbols
 
 # Obfuscation related
 app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release

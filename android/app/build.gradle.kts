@@ -1,66 +1,75 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    // Built-in Kotlin: kotlin-android eklentisi artık gerekmiyor
+    // Flutter Gradle eklentisi, Android eklentisinden sonra gelmeli
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-// Key.properties güvenli yükleme
-import java.util.Properties
-
+// key.properties: önce android/ içine, yoksa android/app/ içine bakar.
+// (Eski kodda iki arama da aynı yola bakıyordu; dosya android/app/ içinde
+// olduğu için hiç bulunmuyor ve release build debug anahtarıyla imzalanıyordu.)
 val keystoreProperties = Properties()
-val keystorePropertiesFile = file("/home/ramo828/Documents/FlutterProjects/3d_printer_calibration/key.properties")
-if (keystorePropertiesFile.exists()) {
+val keystorePropertiesFile = listOf(
+    rootProject.file("key.properties"),
+    file("key.properties"),
+).firstOrNull { it.exists() }
+val hasReleaseKey = keystorePropertiesFile != null
+
+if (keystorePropertiesFile != null) {
     keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
 } else {
-    println("⚠️ key.properties dosyası bulunamadı! Release imzası yapılamayabilir.")
+    println("⚠️ key.properties dosyası bulunamadı! Release build debug anahtarıyla imzalanacak.")
 }
 
 android {
-    namespace = "com.ramosoft.pensiya_kalkulyatoru"
+    namespace = "com.ramosoft.calibration_3d"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-        isCoreLibraryDesugaringEnabled = true // Düzeltildi: "is" eklendi
+        isCoreLibraryDesugaringEnabled = true
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
-    signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"]?.toString()
-            keyPassword = keystoreProperties["keyPassword"]?.toString()
-            val storeFilePath = keystoreProperties["storeFile"]?.toString()
-            if (storeFilePath != null) {
-                storeFile = file(storeFilePath)
+    if (hasReleaseKey) {
+        signingConfigs {
+            create("release") {
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keystoreProperties.getProperty("storeFile")?.let {
+                    storeFile = file(it)
+                }
             }
-            storePassword = keystoreProperties["storePassword"]?.toString()
         }
     }
 
     defaultConfig {
-        applicationId = "com.ramosoft.pensiya_kalkulyatoru"
-        minSdk = flutter.minSdkVersion
+        applicationId = "com.ramosoft.calibration_3d"
+        minSdk = 36
         targetSdk = flutter.targetSdkVersion
-        versionCode = 2
-        versionName = "2.0.0"
-
-        ndk {
-            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
-        }
+        versionCode = 8
+        versionName = "2.1.4"
+        // abiFilters kaldırıldı: Flutter ABI'leri kendisi yönetir,
+        // --split-per-abi ile çakışıp build hatası verebilir.
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
-            isShrinkResources = true
+            signingConfig = if (hasReleaseKey) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
             isMinifyEnabled = true
-            // ProGuard kuralları şu an yorum satırında, gerekirse aç
-            // proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         debug {
             isMinifyEnabled = false
@@ -69,11 +78,16 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
 flutter {
     source = "../.."
 }
 
 dependencies {
-    implementation("com.google.android.gms:play-services-ads:24.6.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

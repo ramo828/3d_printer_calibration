@@ -1,89 +1,103 @@
-import 'dart:io';
+import 'dart:ui' show Locale;
+
+import '../utils/calculations.dart';
 
 class AppLocalizations {
+  AppLocalizations(Locale locale) : isTurkish = locale.languageCode == 'tr';
+
   final bool isTurkish;
 
-  AppLocalizations() : isTurkish = Platform.localeName.startsWith('tr');
+  String _t(String tr, String en) => isTurkish ? tr : en;
 
-  String get appTitle =>
-      isTurkish ? '3D Yazıcı Kalibrasyonu' : '3D Printer Calibration';
+  String _n(double value) => value.toStringAsFixed(2);
 
-  String get home => isTurkish ? 'Ana Sayfa' : 'Home';
-  String get exit => isTurkish ? 'Çıkış' : 'Exit';
+  String get appTitle => _t('3D Yazıcı Kalibrasyonu', '3D Printer Calibration');
 
-  String get stepsCalibration => isTurkish ? 'Eksen Adımları' : 'Axis Steps';
-  String get flowRate => isTurkish ? 'Akış Oranı' : 'Flow Rate';
-  String get retraction => isTurkish ? 'Geri Çekme' : 'Retraction';
-  String get temperature => isTurkish ? 'Sıcaklık' : 'Temperature';
+  String get exit => _t('Çıkış', 'Exit');
+  String get darkMode => _t('Karanlık Mod', 'Dark Mode');
+  String get lightMode => _t('Aydınlık Mod', 'Light Mode');
 
+  // Sekmeler
+  String get stepsCalibration => _t('Eksen Adımları', 'Axis Steps');
+  String get flowRate => _t('Akış Oranı', 'Flow Rate');
+  String get retraction => _t('Geri Çekme', 'Retraction');
+  String get temperature => _t('Sıcaklık', 'Temperature');
+
+  // Eksen adımları
   String axisCalibration(String axis) =>
-      isTurkish ? 'Kalibrasyon: $axis Ekseni' : 'Calibration: $axis Axis';
-  String xAxisResult(double value) => isTurkish
-      ? 'X Ekseni: ${value.toStringAsFixed(2)} mm/adım'
-      : 'X Axis: ${value.toStringAsFixed(2)} mm/step';
-  String yAxisResult(double value) => isTurkish
-      ? 'Y Ekseni: ${value.toStringAsFixed(2)} mm/adım'
-      : 'Y Axis: ${value.toStringAsFixed(2)} mm/step';
-  String zAxisResult(double value) => isTurkish
-      ? 'Z Ekseni: ${value.toStringAsFixed(2)} mm/adım'
-      : 'Z Axis: ${value.toStringAsFixed(2)} mm/step';
-
+      _t('Kalibrasyon: $axis Ekseni', 'Calibration: $axis Axis');
+  String axisResult(String axis, double value) => _t(
+        '$axis Ekseni: ${_n(value)} adım/mm',
+        '$axis Axis: ${_n(value)} steps/mm',
+      );
   String get optimalDistance =>
-      isTurkish ? 'Optimal Mesafe (mm)' : 'Optimal Distance (mm)';
+      _t('Optimal Mesafe (mm)', 'Optimal Distance (mm)');
   String get measuredDistance =>
-      isTurkish ? 'Ölçülen Mesafe (mm)' : 'Measured Distance (mm)';
-  String get currentSteps => isTurkish ? 'Mevcut Adımlar' : 'Current Steps';
-  String get flowRateInput => isTurkish ? 'Akış Oranı (%)' : 'Flow Rate (%)';
+      _t('Ölçülen Mesafe (mm)', 'Measured Distance (mm)');
+  String get currentSteps => _t('Mevcut Adımlar', 'Current Steps');
 
-  String flowRateResult(double value) => isTurkish
-      ? 'Akış Oranı: ${value.toStringAsFixed(2)} %'
-      : 'Flow Rate: ${value.toStringAsFixed(2)} %';
-  String get optimalWallThickness => isTurkish
-      ? 'Optimal Duvar Kalınlığı (mm)'
-      : 'Optimal Wall Thickness (mm)';
-  String get measuredWallThickness => isTurkish
-      ? 'Ölçülen Duvar Kalınlığı (mm)'
-      : 'Measured Wall Thickness (mm)';
+  // Akış oranı
+  String flowRateResult(double value) =>
+      _t('Akış Oranı: ${_n(value)} %', 'Flow Rate: ${_n(value)} %');
+  String get optimalWallThickness =>
+      _t('Optimal Duvar Kalınlığı (mm)', 'Optimal Wall Thickness (mm)');
+  String get measuredWallThickness =>
+      _t('Ölçülen Duvar Kalınlığı (mm)', 'Measured Wall Thickness (mm)');
   String get currentFlowRate =>
-      isTurkish ? 'Mevcut Akış Oranı (%)' : 'Current Flow Rate (%)';
+      _t('Mevcut Akış Oranı (%)', 'Current Flow Rate (%)');
 
-  String retractionDistanceResult(double value) => isTurkish
-      ? 'Geri Çekme Mesafesi: ${value.toStringAsFixed(2)} mm'
-      : 'Retraction Distance: ${value.toStringAsFixed(2)} mm';
-  String retractionSpeedResult(double value) => isTurkish
-      ? 'Geri Çekme Hızı: ${value.toStringAsFixed(2)} mm/s'
-      : 'Retraction Speed: ${value.toStringAsFixed(2)} mm/s';
-  String get optimalRetractionDistance => isTurkish
-      ? 'Optimal Geri Çekme Mesafesi (mm)'
-      : 'Optimal Retraction Distance (mm)';
-  String get measuredRetractionDistance => isTurkish
-      ? 'Ölçülen Geri Çekme Mesafesi (mm)'
-      : 'Measured Retraction Distance (mm)';
-  String get currentRetractionSpeed => isTurkish
-      ? 'Mevcut Geri Çekme Hızı (mm/s)'
-      : 'Current Retraction Speed (mm/s)';
+  // Geri çekme
+  String retractionDistanceResult(double value) => _t(
+        'Geri Çekme Mesafesi: ${_n(value)} mm',
+        'Retraction Distance: ${_n(value)} mm',
+      );
+  String retractionSpeedResult(double value) => _t(
+        'Geri Çekme Hızı: ${_n(value)} mm/s',
+        'Retraction Speed: ${_n(value)} mm/s',
+      );
+  String get optimalRetractionDistance => _t(
+        'Optimal Geri Çekme Mesafesi (mm)',
+        'Optimal Retraction Distance (mm)',
+      );
+  String get measuredRetractionDistance => _t(
+        'Ölçülen Geri Çekme Mesafesi (mm)',
+        'Measured Retraction Distance (mm)',
+      );
+  String get currentRetractionSpeed => _t(
+        'Mevcut Geri Çekme Hızı (mm/s)',
+        'Current Retraction Speed (mm/s)',
+      );
 
-  String temperatureResult(double value) => isTurkish
-      ? 'Önerilen Sıcaklık: ${value.toStringAsFixed(2)} °C'
-      : 'Suggested Temperature: ${value.toStringAsFixed(2)} °C';
+  // Sıcaklık
+  String temperatureResult(double value) => _t(
+        'Önerilen Sıcaklık: ${_n(value)} °C',
+        'Suggested Temperature: ${_n(value)} °C',
+      );
   String get currentTemperature =>
-      isTurkish ? 'Mevcut Sıcaklık (°C)' : 'Current Temperature (°C)';
+      _t('Mevcut Sıcaklık (°C)', 'Current Temperature (°C)');
   String get stringingScore =>
-      isTurkish ? 'Stringing Puanı (0-10)' : 'Stringing Score (0-10)';
+      _t('Stringing Puanı (0-10)', 'Stringing Score (0-10)');
 
-  String get calculate => isTurkish ? 'Hesapla' : 'Calculate';
-  String get reset => isTurkish ? 'Sıfırla' : 'Reset';
-
+  // Butonlar ve başlıklar
+  String get calculate => _t('Hesapla', 'Calculate');
+  String get reset => _t('Sıfırla', 'Reset');
   String historyTitle(String type) =>
-      isTurkish ? '$type Kalibrasyon Geçmişi' : '$type Calibration History';
+      _t('$type Kalibrasyon Geçmişi', '$type Calibration History');
 
-  String get errorZeroFlowRate => isTurkish
-      ? 'Ölçülen mesafe veya akış oranı sıfır olamaz.'
-      : 'Measured distance or flow rate cannot be zero.';
-  String get errorZeroWallThickness => isTurkish
-      ? 'Ölçülen duvar kalınlığı sıfır olamaz.'
-      : 'Measured wall thickness cannot be zero.';
-  String get errorZeroRetraction => isTurkish
-      ? 'Ölçülen geri çekme mesafesi sıfır olamaz.'
-      : 'Measured retraction distance cannot be zero.';
+  // Hatalar
+  String get errorGeneric => _t('Bir hata oluştu.', 'An error occurred.');
+  String errorMessage(CalibrationError error) => switch (error) {
+        CalibrationError.zeroMeasuredDistance => _t(
+            'Ölçülen mesafe sıfır olamaz.',
+            'Measured distance cannot be zero.',
+          ),
+        CalibrationError.zeroWallThickness => _t(
+            'Ölçülen duvar kalınlığı sıfır olamaz.',
+            'Measured wall thickness cannot be zero.',
+          ),
+        CalibrationError.zeroRetractionDistance => _t(
+            'Ölçülen geri çekme mesafesi sıfır olamaz.',
+            'Measured retraction distance cannot be zero.',
+          ),
+      };
 }

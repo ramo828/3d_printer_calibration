@@ -1,13 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- İnternet erişimi izni -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- Reklamlar ve google_fonts (yazı tipi indirme) için gerekli -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="calibration_3d"
+        android:label="3D Printer Calibration"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/> <!-- Bu kısmı kendi App ID'nizle değiştirin -->
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
+        <!-- DİKKAT: Bu Google'ın TEST uygulama kimliğidir. Yayından önce kendi AdMob App ID'nizle değiştirin. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
