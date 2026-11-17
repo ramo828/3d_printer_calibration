@@ -25,7 +25,7 @@ if (keystorePropertiesFile != null) {
 
 android {
     namespace = "com.ramosoft.calibration_3d"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -49,10 +49,10 @@ android {
 
     defaultConfig {
         applicationId = "com.ramosoft.calibration_3d"
-        minSdk = 36
-        targetSdk = flutter.targetSdkVersion
-        versionCode = 8
-        versionName = "2.1.4"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 11
+        versionName = "2.1.7"
         // abiFilters kaldırıldı: Flutter ABI'leri kendisi yönetir,
         // --split-per-abi ile çakışıp build hatası verebilir.
     }

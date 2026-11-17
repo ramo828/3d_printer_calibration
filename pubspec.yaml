@@ -2,8 +2,8 @@ name: calibration_3d
 description: "3D printer calibration tools."
 publish_to: 'none'
 
-# versionName = 2.0.3, versionCode = 3 (build.gradle.kts ile aynı)
-version: 2.1.0+3
+# versionName = 2.1.4, versionCode = 8 (build.gradle.kts ile aynı)
+version: 2.1.0+6
 
 environment:
   sdk: ^3.10.0
